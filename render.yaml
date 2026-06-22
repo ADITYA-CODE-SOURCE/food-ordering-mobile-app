@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: food-ordering-mobile-app
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /health.php
+    envVars:
+      - key: DB_HOST
+        sync: false
+      - key: DB_PORT
+        value: "3306"
+      - key: DB_DATABASE
+        value: food_ordering_app
+      - key: DB_USERNAME
+        sync: false
+      - key: DB_PASSWORD
+        sync: false

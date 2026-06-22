@@ -1,0 +1,16 @@
+.dart_tool/
+.idea/
+.metadata
+*.iml
+
+flutter_app/.dart_tool/
+flutter_app/build/
+flutter_app/android/local.properties
+flutter_app/android/.gradle/
+flutter_app/windows/flutter/ephemeral/
+
+mysql_data/
+
+*.log
+.env
+.env.*

@@ -1,0 +1,62 @@
+# Folder Structure
+
+```text
+food-ordering-mobile-app/
+  flutter_app/
+    lib/
+      models/
+        cart_item.dart
+        category.dart
+        food_item.dart
+        order_model.dart
+        user.dart
+      screens/
+        cart_screen.dart
+        checkout_screen.dart
+        food_details_screen.dart
+        home_screen.dart
+        login_screen.dart
+        my_orders_screen.dart
+        order_success_screen.dart
+        register_screen.dart
+        splash_screen.dart
+      services/
+        api_service.dart
+        auth_service.dart
+        cart_service.dart
+        food_service.dart
+        order_service.dart
+      utils/
+        app_constants.dart
+        app_theme.dart
+        session_manager.dart
+        validators.dart
+      widgets/
+        category_chip.dart
+        error_view.dart
+        food_card.dart
+        loading_indicator.dart
+        quantity_selector.dart
+        section_header.dart
+      main.dart
+    pubspec.yaml
+  php_backend/
+    add_to_cart.php
+    config.php
+    get_categories.php
+    get_food_detail.php
+    get_food_items.php
+    get_orders.php
+    login.php
+    place_order.php
+    register.php
+    remove_from_cart.php
+    response.php
+  database/
+    food_ordering_app.sql
+  docs/
+    folder_structure.md
+    interview_questions.md
+    project_flow.md
+  README.md
+```

@@ -1,0 +1,50 @@
+# PHP Web Upgrade Folder Structure
+
+```text
+php_app/
+  admin/
+    _sidebar.php
+    categories.php
+    coupons.php
+    food_delete.php
+    food_form.php
+    food_save.php
+    foods.php
+    index.php
+    orders.php
+    reports.php
+    users.php
+  actions/
+    cart_action.php
+    favorite_action.php
+    login_action.php
+    place_order_action.php
+    profile_action.php
+    register_action.php
+    review_action.php
+  assets/
+    css/
+      style.css
+    js/
+      app.js
+    img/
+  includes/
+    auth.php
+    bootstrap.php
+    footer.php
+    functions.php
+    header.php
+  uploads/
+    foods/
+  cart.php
+  checkout.php
+  favorites.php
+  food.php
+  index.php
+  login.php
+  logout.php
+  menu.php
+  orders.php
+  profile.php
+  register.php
+```
