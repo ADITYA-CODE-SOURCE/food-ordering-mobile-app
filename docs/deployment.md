@@ -8,11 +8,14 @@ This project can be hosted as one Docker web service:
 
 ## Database
 
-The app uses MySQL. Create a hosted MySQL database first, then import:
+The app uses MySQL. Create a hosted MySQL database first.
+On first start, the Docker container automatically imports:
 
 ```text
-database/food_ordering_app.sql
+database/food_ordering_startup.sql
 ```
+
+The import runs only when the `users` table does not exist yet.
 
 If the MySQL database is on Railway, do not use `mysql.railway.internal`
 on Render. That is Railway's private network hostname and only works from
