@@ -21,10 +21,16 @@ $database = getenv('DB_DATABASE') ?: 'food_ordering_app';
 $conn = @new mysqli($host, $username, $password, $database, $port);
 
 if ($conn->connect_error) {
+    $message = 'Database connection failed.';
+
+    if (str_ends_with($host, '.railway.internal')) {
+        $message = 'Database connection failed. DB_HOST uses a Railway private hostname, which Render cannot resolve. Use Railway public TCP proxy host/port or another public MySQL host.';
+    }
+
     http_response_code(500);
     echo json_encode([
         'success' => false,
-        'message' => 'Database connection failed.'
+        'message' => $message
     ]);
     exit();
 }

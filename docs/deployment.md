@@ -14,6 +14,11 @@ The app uses MySQL. Create a hosted MySQL database first, then import:
 database/food_ordering_app.sql
 ```
 
+If the MySQL database is on Railway, do not use `mysql.railway.internal`
+on Render. That is Railway's private network hostname and only works from
+Railway services. In Railway, open the MySQL service networking/connect
+settings and use the public TCP proxy host and port instead.
+
 Use the hosted database values as environment variables:
 
 ```text
