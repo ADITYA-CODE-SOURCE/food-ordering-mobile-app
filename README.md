@@ -28,7 +28,7 @@ A beginner-friendly full-stack food ordering project built with Flutter, PHP, an
 
 ## Recommended Local Setup
 
-1. Import `database/food_ordering_app.sql` into MySQL.
+1. Import `database/food_ordering_startup.sql` into MySQL.
 2. Copy `php_backend/` into your XAMPP or WAMP `htdocs` folder.
 3. Update database credentials in `php_backend/config.php`.
 4. Install Flutter dependencies inside `flutter_app/` using `flutter pub get`.
@@ -40,11 +40,11 @@ A beginner-friendly full-stack food ordering project built with Flutter, PHP, an
 1. Import `database/food_ordering_startup.sql` into MySQL.
 2. Open `php_app/` using PHP built-in server or XAMPP.
 3. Visit `menu.php` for the customer app and `admin/index.php` for the admin dashboard.
-4. Use the demo accounts documented in `docs/php_web_upgrade/implementation_steps.md`.
+4. Create an admin user directly in MySQL or through deployment environment variables before exposing the admin dashboard publicly.
 
 ## Notes
 
-- The code is kept simple so you can explain it easily in an internship interview.
+- The code is organized to support both web and Flutter clients against one production schema.
 - Comments are only added where the logic may be slightly non-obvious.
 - This workspace does not currently have `flutter` or `php` installed, so the project files were created but not executed here.
 
@@ -55,6 +55,11 @@ Deployment files are included:
 - `Dockerfile` hosts the PHP web app, PHP API, and Flutter web build together.
 - `render.yaml` defines a Render Docker web service.
 - `docs/deployment.md` has the full deployment checklist.
+
+Production environment variables:
+
+- `APP_KEY` - required for mobile API bearer token signing
+- `ADMIN_NAME`, `ADMIN_EMAIL`, `ADMIN_PHONE`, `ADMIN_PASSWORD` - optional first-run admin bootstrap values
 
 Hosted paths:
 

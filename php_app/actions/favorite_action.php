@@ -2,6 +2,9 @@
 require_once dirname(__DIR__) . '/includes/bootstrap.php';
 require_login();
 
+require_post_request('../menu.php');
+require_csrf('../menu.php');
+
 $foodId = (int) ($_POST['food_id'] ?? 0);
 if ($foodId <= 0) {
     set_flash('error', 'Invalid food selection.');

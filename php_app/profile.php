@@ -16,6 +16,7 @@ require __DIR__ . '/includes/header.php';
             </div>
         </div>
         <form action="actions/profile_action.php" method="post" data-loading-form>
+            <?= csrf_input() ?>
             <div class="form-grid">
                 <div><label>Name</label><input type="text" name="name" value="<?= e($user['name']) ?>" required></div>
                 <div><label>Phone</label><input type="text" name="phone" value="<?= e($user['phone']) ?>" required></div>
@@ -32,6 +33,7 @@ require __DIR__ . '/includes/header.php';
             <?php endforeach; ?>
         </ul>
         <form action="actions/profile_action.php" method="post" data-loading-form style="margin-top:18px;">
+            <?= csrf_input() ?>
             <input type="hidden" name="action" value="address">
             <div class="form-grid">
                 <div><label>Label</label><input type="text" name="label" placeholder="Home" required></div>

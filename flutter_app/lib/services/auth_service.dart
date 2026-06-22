@@ -11,7 +11,10 @@ class AuthService {
       'password': password,
     });
 
-    final user = User.fromJson(response['data']['user']);
+    final user = User.fromJson({
+      ...(response['data']['user'] as Map<String, dynamic>),
+      'api_token': response['data']['token'],
+    });
     SessionManager.currentUser = user;
     return user;
   }

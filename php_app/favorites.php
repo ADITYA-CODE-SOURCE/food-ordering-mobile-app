@@ -6,7 +6,7 @@ $favorites = fetch_all($pdo, 'SELECT f.* FROM favorites fav INNER JOIN foods f O
 $pageTitle = 'Wishlist | Foodly Pro';
 require __DIR__ . '/includes/header.php';
 ?>
-<section class="section-head"><div><h1 class="section-title" style="font-size:34px;">Wishlist</h1><p class="section-subtitle" style="color:var(--muted);">Saved foods for faster reordering and interview-ready personalization.</p></div></section>
+<section class="section-head"><div><h1 class="section-title" style="font-size:34px;">Wishlist</h1><p class="section-subtitle" style="color:var(--muted);">Saved foods for faster reordering and personalized recommendations.</p></div></section>
 <?php if (!$favorites): ?>
     <section class="empty-state"><i class="fa-regular fa-heart"></i><h2>No wishlist items yet</h2><p class="muted">Save your favorite foods from the menu page.</p><a class="button" href="menu.php">Explore menu</a></section>
 <?php else: ?>

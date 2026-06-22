@@ -3,16 +3,25 @@
 declare(strict_types=1);
 
 if (session_status() === PHP_SESSION_NONE) {
+    ini_set('session.use_strict_mode', '1');
+    ini_set('session.use_only_cookies', '1');
+
+    $isHttps = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+        || (($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https');
+
     session_set_cookie_params([
+        'lifetime' => 0,
+        'path' => '/',
         'httponly' => true,
         'samesite' => 'Lax',
+        'secure' => $isHttps,
     ]);
     session_start();
 }
 
 $dbHost = getenv('DB_HOST') ?: '127.0.0.1';
 $dbPort = getenv('DB_PORT') ?: '3306';
-$dbName = getenv('DB_DATABASE') ?: 'food_ordering_app';
+$dbName = getenv('DB_DATABASE') ?: 'foodapp_db';
 $dbUser = getenv('DB_USERNAME') ?: getenv('DB_USER') ?: 'root';
 $dbPassword = getenv('DB_PASSWORD') ?: '';
 
@@ -52,3 +61,5 @@ try {
 
 require_once __DIR__ . '/functions.php';
 require_once __DIR__ . '/auth.php';
+
+csrf_token();

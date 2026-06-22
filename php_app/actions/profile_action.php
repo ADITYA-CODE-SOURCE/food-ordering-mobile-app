@@ -2,6 +2,9 @@
 require_once dirname(__DIR__) . '/includes/bootstrap.php';
 require_login();
 
+require_post_request('../profile.php');
+require_csrf('../profile.php');
+
 $userId = current_user()['id'];
 $action = sanitize_text($_POST['action'] ?? 'profile');
 

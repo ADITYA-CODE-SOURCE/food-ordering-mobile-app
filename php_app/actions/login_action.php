@@ -1,6 +1,9 @@
 <?php
 require_once dirname(__DIR__) . '/includes/bootstrap.php';
 
+require_post_request('../login.php');
+require_csrf('../login.php');
+
 $email = filter_var($_POST['email'] ?? '', FILTER_VALIDATE_EMAIL);
 $password = (string) ($_POST['password'] ?? '');
 

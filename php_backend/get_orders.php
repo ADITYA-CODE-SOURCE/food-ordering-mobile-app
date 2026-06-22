@@ -5,14 +5,11 @@ require_once 'response.php';
 
 requirePostMethod();
 
-$data = getJsonInput();
-$userId = (int) ($data['user_id'] ?? 0);
+$user = requireApiUser();
 
-if ($userId <= 0) {
-    sendResponse(false, 'Valid user id is required.', null, 422);
-}
+$userId = (int) $user['id'];
 
-$orderSql = 'SELECT id, total_amount, address, order_status, created_at
+$orderSql = 'SELECT id, total_amount, delivery_address AS address, order_status, placed_at AS created_at
              FROM orders
              WHERE user_id = ?
              ORDER BY id DESC';
@@ -24,12 +21,13 @@ $orderResult = $orderStmt->get_result();
 $orders = [];
 
 while ($order = $orderResult->fetch_assoc()) {
-    $itemSql = 'SELECT oi.food_id, oi.quantity, oi.price, fi.name AS food_name
+    $orderId = (int) $order['id'];
+    $itemSql = 'SELECT oi.food_id, oi.quantity, oi.unit_price AS price, f.name AS food_name
                 FROM order_items oi
-                INNER JOIN food_items fi ON fi.id = oi.food_id
+                INNER JOIN foods f ON f.id = oi.food_id
                 WHERE oi.order_id = ?';
     $itemStmt = $conn->prepare($itemSql);
-    $itemStmt->bind_param('i', $order['id']);
+    $itemStmt->bind_param('i', $orderId);
     $itemStmt->execute();
     $itemResult = $itemStmt->get_result();
 

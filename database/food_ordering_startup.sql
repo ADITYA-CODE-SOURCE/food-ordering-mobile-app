@@ -1,5 +1,4 @@
-CREATE DATABASE IF NOT EXISTS food_ordering_app;
-USE food_ordering_app;
+USE foodapp_db;
 
 SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS notifications;
@@ -254,9 +253,9 @@ CREATE TABLE notifications (
     CONSTRAINT fk_notification_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
-INSERT INTO users (role, name, email, phone, password) VALUES
-('admin', 'Admin User', 'admin@foodapp.test', '9999999999', '$2y$10$Ooy94K9YFkCsoW1gSHJFK.nPPWedQ6WvcbRS49ssIGYqJANCXHDIi'),
-('customer', 'Demo Customer', 'customer@foodapp.test', '8888888888', '$2y$10$8iXXaE1CuagpgcUgE5ftLuXr0nrlrHKeVcORg1EYP7E19erodDSi2');
+INSERT INTO users (role, name, email, phone, password, status) VALUES
+('customer', 'Seed User One', 'seed-user-one@internal.invalid', '9000000001', '$2y$10$yMdG1lwx9zQKk2qq9nP2weTHZ66z2k1VQjF90QnLB522Ssqn1H4xS', 'blocked'),
+('customer', 'Sample Customer', 'seed-customer@internal.invalid', '9000000002', '$2y$10$yMdG1lwx9zQKk2qq9nP2weTHZ66z2k1VQjF90QnLB522Ssqn1H4xS', 'blocked');
 
 INSERT INTO categories (name, slug, icon, image, description) VALUES
 ('Pizza', 'pizza', 'fa-pizza-slice', 'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=900&q=80', 'Stone baked pizzas and cheesy slices'),
@@ -339,7 +338,7 @@ INSERT INTO food_addons (food_id, addon_id) VALUES
 (27, 6), (28, 4), (29, 6), (30, 5);
 
 INSERT INTO addresses (user_id, label, contact_name, phone, address_line, city, state, postal_code, is_default) VALUES
-(2, 'Home', 'Demo Customer', '8888888888', 'Flat 204, Green Residency, Baner Road', 'Pune', 'Maharashtra', '411045', 1);
+(2, 'Home', 'Sample Customer', '9000000002', 'Flat 204, Green Residency, Baner Road', 'Pune', 'Maharashtra', '411045', 1);
 
 INSERT INTO favorites (user_id, food_id) VALUES
 (2, 2), (2, 7), (2, 11), (2, 23);
@@ -357,9 +356,9 @@ INSERT INTO reviews (user_id, food_id, rating, review_text) VALUES
 (2, 23, 5, 'Blueberry cheesecake tastes premium and fresh.');
 
 INSERT INTO orders (order_number, user_id, address_id, customer_name, customer_phone, delivery_address, payment_method, payment_status, order_status, subtotal, discount_amount, delivery_fee, total_amount, coupon_code, notes, placed_at) VALUES
-('ORD-20260621-001', 2, 1, 'Demo Customer', '8888888888', 'Flat 204, Green Residency, Baner Road, Pune', 'Cash on Delivery', 'pending', 'Pending', 698.00, 100.00, 40.00, 638.00, 'FLAT100', 'Ring the bell once', NOW() - INTERVAL 1 DAY),
-('ORD-20260621-002', 2, 1, 'Demo Customer', '8888888888', 'Flat 204, Green Residency, Baner Road, Pune', 'UPI', 'paid', 'Delivered', 548.00, 82.20, 30.00, 495.80, 'FLASH15', 'Leave at reception', NOW() - INTERVAL 3 HOUR),
-('ORD-20260621-003', 2, 1, 'Demo Customer', '8888888888', 'Flat 204, Green Residency, Baner Road, Pune', 'Google Pay', 'paid', 'Preparing', 398.00, 0.00, 30.00, 428.00, NULL, NULL, NOW() - INTERVAL 1 HOUR);
+('ORD-20260621-001', 2, 1, 'Sample Customer', '9000000002', 'Flat 204, Green Residency, Baner Road, Pune', 'Cash on Delivery', 'pending', 'Pending', 698.00, 100.00, 40.00, 638.00, 'FLAT100', 'Ring the bell once', NOW() - INTERVAL 1 DAY),
+('ORD-20260621-002', 2, 1, 'Sample Customer', '9000000002', 'Flat 204, Green Residency, Baner Road, Pune', 'UPI', 'paid', 'Delivered', 548.00, 82.20, 30.00, 495.80, 'FLASH15', 'Leave at reception', NOW() - INTERVAL 3 HOUR),
+('ORD-20260621-003', 2, 1, 'Sample Customer', '9000000002', 'Flat 204, Green Residency, Baner Road, Pune', 'Google Pay', 'paid', 'Preparing', 398.00, 0.00, 30.00, 428.00, NULL, NULL, NOW() - INTERVAL 1 HOUR);
 
 INSERT INTO order_items (order_id, food_id, variant_name, quantity, unit_price, total_price, addons_summary) VALUES
 (1, 2, 'Large', 1, 369.00, 369.00, 'Extra Cheese'),

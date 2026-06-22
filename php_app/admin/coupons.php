@@ -3,6 +3,8 @@ require_once dirname(__DIR__) . '/includes/bootstrap.php';
 require_admin();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    require_csrf('coupons.php');
+
     $pdo->prepare('INSERT INTO coupons (code, title, discount_type, discount_value, min_order_amount, max_discount, expires_at, usage_limit, is_active) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1)')->execute([
         strtoupper(sanitize_text($_POST['code'] ?? '')),
         sanitize_text($_POST['title'] ?? ''),
@@ -27,6 +29,7 @@ require dirname(__DIR__) . '/includes/header.php';
         <div class="panel">
             <h1 class="section-title" style="font-size:34px;">Coupon engine</h1>
             <form method="post" data-loading-form>
+                <?= csrf_input() ?>
                 <div class="form-grid">
                     <div><label>Code</label><input type="text" name="code" required></div>
                     <div><label>Title</label><input type="text" name="title" required></div>

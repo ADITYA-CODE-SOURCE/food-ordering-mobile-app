@@ -30,14 +30,23 @@ DB_PORT
 DB_DATABASE
 DB_USERNAME
 DB_PASSWORD
+APP_KEY
+ADMIN_NAME
+ADMIN_EMAIL
+ADMIN_PHONE
+ADMIN_PASSWORD
 ```
+
+- `APP_KEY` should be a long random secret used to sign mobile API bearer tokens.
+- The optional `ADMIN_*` variables create the first active admin account on initial database bootstrap.
+- The startup schema ships with blocked sample users for sample data only; it does not expose a public admin login.
 
 ## Render Deployment
 
 1. Push this folder to GitHub, GitLab, or Bitbucket.
 2. Open Render and create a new Blueprint from the repository.
 3. Render will read `render.yaml` and create the Docker web service.
-4. Fill the database environment variables in the Render Dashboard.
+4. Fill the database, `APP_KEY`, and `ADMIN_*` environment variables in the Render Dashboard.
 5. Deploy.
 
 After deployment:

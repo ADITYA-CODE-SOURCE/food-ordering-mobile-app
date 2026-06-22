@@ -11,8 +11,15 @@ if ($foodId <= 0) {
     sendResponse(false, 'Valid food id is required.', null, 422);
 }
 
-$sql = 'SELECT id, category_id, name, description, price, image, rating, is_available
-        FROM food_items
+$sql = 'SELECT id,
+               category_id,
+               name,
+               description,
+               COALESCE(discount_price, base_price) AS price,
+               COALESCE(image, "") AS image,
+               rating,
+               CASE WHEN availability_status = "sold_out" THEN 0 ELSE 1 END AS is_available
+        FROM foods
         WHERE id = ? LIMIT 1';
 $stmt = $conn->prepare($sql);
 $stmt->bind_param('i', $foodId);

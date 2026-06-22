@@ -3,6 +3,8 @@ require_once dirname(__DIR__) . '/includes/bootstrap.php';
 require_admin();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    require_csrf('orders.php');
+
     $orderId = (int) ($_POST['order_id'] ?? 0);
     $status = sanitize_text($_POST['order_status'] ?? 'Pending');
     $pdo->prepare('UPDATE orders SET order_status = ? WHERE id = ?')->execute([$status, $orderId]);
@@ -32,6 +34,7 @@ require dirname(__DIR__) . '/includes/header.php';
                         <td><span class="<?= order_badge_class($order['order_status']) ?>"><?= e($order['order_status']) ?></span></td>
                         <td>
                             <form method="post" class="card-actions">
+                                <?= csrf_input() ?>
                                 <input type="hidden" name="order_id" value="<?= (int) $order['id'] ?>">
                                 <select name="order_status">
                                     <?php foreach (['Pending','Accepted','Preparing','Ready','Out For Delivery','Delivered','Cancelled'] as $status): ?>

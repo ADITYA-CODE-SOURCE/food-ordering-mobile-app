@@ -2,6 +2,9 @@
 require_once dirname(__DIR__) . '/includes/bootstrap.php';
 require_login();
 
+require_post_request('../menu.php');
+require_csrf('../menu.php');
+
 $foodId = (int) ($_POST['food_id'] ?? 0);
 $rating = (int) ($_POST['rating'] ?? 0);
 $reviewText = sanitize_text($_POST['review_text'] ?? '');

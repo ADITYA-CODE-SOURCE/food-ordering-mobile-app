@@ -5,15 +5,17 @@ require_once 'response.php';
 
 requirePostMethod();
 
+$user = requireApiUser();
+
 $data = getJsonInput();
 
-$userId = (int) ($data['user_id'] ?? 0);
 $foodId = (int) ($data['food_id'] ?? 0);
 
-if ($userId <= 0 || $foodId <= 0) {
-    sendResponse(false, 'User id and food id are required.', null, 422);
+if ($foodId <= 0) {
+    sendResponse(false, 'Food id is required.', null, 422);
 }
 
+$userId = (int) $user['id'];
 $sql = 'DELETE FROM cart WHERE user_id = ? AND food_id = ?';
 $stmt = $conn->prepare($sql);
 $stmt->bind_param('ii', $userId, $foodId);

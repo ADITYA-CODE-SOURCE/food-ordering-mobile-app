@@ -4,12 +4,16 @@ import 'dart:async';
 import 'package:http/http.dart' as http;
 
 import '../utils/app_constants.dart';
+import '../utils/session_manager.dart';
 
 class ApiService {
   Future<Map<String, dynamic>> getRequest(String endpoint) async {
     try {
       final response = await http
-          .get(Uri.parse('${AppConstants.baseUrl}/$endpoint'))
+          .get(
+            Uri.parse('${AppConstants.baseUrl}/$endpoint'),
+            headers: _headers(),
+          )
           .timeout(AppConstants.apiTimeout);
       return _handleResponse(response);
     } on TimeoutException {
@@ -22,10 +26,10 @@ class ApiService {
     Map<String, dynamic> body,
   ) async {
     try {
-      final response = await http
+        final response = await http
           .post(
             Uri.parse('${AppConstants.baseUrl}/$endpoint'),
-            headers: {'Content-Type': 'application/json'},
+            headers: _headers(jsonBody: true),
             body: jsonEncode(body),
           )
           .timeout(AppConstants.apiTimeout);
@@ -57,5 +61,22 @@ class ApiService {
     }
 
     return 'Something went wrong.';
+  }
+
+  Map<String, String> _headers({bool jsonBody = false}) {
+    final headers = <String, String>{
+      'Accept': 'application/json',
+    };
+
+    if (jsonBody) {
+      headers['Content-Type'] = 'application/json';
+    }
+
+    final token = SessionManager.authToken;
+    if (token != null && token.isNotEmpty) {
+      headers['Authorization'] = 'Bearer $token';
+    }
+
+    return headers;
   }
 }

@@ -2,6 +2,9 @@
 require_once dirname(__DIR__) . '/includes/bootstrap.php';
 require_login();
 
+require_post_request('../cart.php');
+require_csrf('../cart.php');
+
 $userId = current_user()['id'];
 $action = sanitize_text($_POST['action'] ?? 'add');
 

@@ -16,6 +16,7 @@ require __DIR__ . '/includes/header.php';
         </div>
     </div>
     <form action="actions/register_action.php" method="post" data-loading-form>
+        <?= csrf_input() ?>
         <div class="form-grid">
             <div>
                 <label>Full Name</label>

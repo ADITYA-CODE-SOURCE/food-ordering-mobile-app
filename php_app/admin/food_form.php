@@ -13,6 +13,7 @@ require dirname(__DIR__) . '/includes/header.php';
     <section class="panel">
         <div class="section-head" style="margin-top:0;"><div><h1 class="section-title" style="font-size:34px;"><?= $food ? 'Edit food' : 'Add food' ?></h1></div></div>
         <form action="food_save.php" method="post" enctype="multipart/form-data" data-loading-form>
+            <?= csrf_input() ?>
             <input type="hidden" name="id" value="<?= (int) ($food['id'] ?? 0) ?>">
             <div class="form-grid">
                 <div><label>Name</label><input type="text" name="name" value="<?= e($food['name'] ?? '') ?>" required></div>
@@ -29,7 +30,7 @@ require dirname(__DIR__) . '/includes/header.php';
                 <div class="full"><label>Nutritional info</label><textarea name="nutrition_info"><?= e($food['nutrition_info'] ?? '') ?></textarea></div>
                 <div>
                     <label>Image upload</label>
-                    <input type="file" name="image" <?= $food ? '' : 'required' ?>>
+                    <input type="file" name="image" accept="image/jpeg,image/png,image/webp" <?= $food ? '' : 'required' ?>>
                 </div>
                 <?php if (!empty($food['image'])): ?>
                     <div class="full">

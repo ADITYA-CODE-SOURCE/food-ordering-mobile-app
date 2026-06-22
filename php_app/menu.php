@@ -61,10 +61,10 @@ require __DIR__ . '/includes/header.php';
 <section class="hero">
     <article class="hero-banner">
         <img src="<?= e($banners[0]['image'] ?? 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1400&q=80') ?>" alt="banner">
-        <div class="hero-copy">
-            <div class="pill"><i class="fa-solid fa-bolt"></i> Startup style dashboard</div>
-            <h1><?= e($banners[0]['title'] ?? 'Crave-worthy food, crafted for interviews') ?></h1>
-            <p><?= e($banners[0]['subtitle'] ?? 'Professional menu, wishlist, coupons, reviews, admin analytics, and delivery tracking in one PHP + MySQL project.') ?></p>
+            <div class="hero-copy">
+                <div class="pill"><i class="fa-solid fa-bolt"></i> Fast online ordering</div>
+                <h1><?= e($banners[0]['title'] ?? 'Crave-worthy food delivered fresh') ?></h1>
+                <p><?= e($banners[0]['subtitle'] ?? 'Professional menu, wishlist, coupons, reviews, admin analytics, and delivery tracking in one PHP + MySQL platform.') ?></p>
             <div class="card-actions">
                 <a class="button" href="checkout.php">Quick Checkout</a>
                 <a class="button ghost" href="#food-grid">Explore Menu</a>
@@ -181,6 +181,7 @@ require __DIR__ . '/includes/header.php';
                         <a class="button secondary" href="food.php?slug=<?= e($food['slug']) ?>">Details</a>
                         <?php if (is_logged_in()): ?>
                             <form action="actions/favorite_action.php" method="post" style="display:inline;">
+                                <?= csrf_input() ?>
                                 <input type="hidden" name="food_id" value="<?= (int) $food['id'] ?>">
                                 <button type="submit"><i class="fa-regular fa-heart"></i> Wishlist</button>
                             </form>

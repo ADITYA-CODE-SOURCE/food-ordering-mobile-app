@@ -24,7 +24,7 @@ $basePath = $basePath ?? (str_contains(str_replace('\\', '/', $_SERVER['PHP_SELF
                 <span class="brand-badge"><i class="fa-solid fa-bowl-food"></i></span>
                 <span>
                     <strong>Foodly Pro</strong>
-                    <small>Delivery dashboard demo</small>
+                    <small>Fresh food delivery platform</small>
                 </span>
             </a>
             <nav class="topnav">
@@ -44,7 +44,10 @@ $basePath = $basePath ?? (str_contains(str_replace('\\', '/', $_SERVER['PHP_SELF
                     <div class="profile-pill">
                         <span><?= e($user['name']) ?></span>
                         <a href="<?= e($basePath) ?>profile.php">Profile</a>
-                        <a href="<?= e($basePath) ?>logout.php">Logout</a>
+                        <form action="<?= e($basePath) ?>logout.php" method="post" style="display:inline;">
+                            <?= csrf_input() ?>
+                            <button type="submit" style="background:none;border:none;padding:0;color:inherit;font:inherit;cursor:pointer;">Logout</button>
+                        </form>
                     </div>
                 <?php else: ?>
                     <a class="button ghost" href="<?= e($basePath) ?>login.php">Login</a>

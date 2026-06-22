@@ -13,6 +13,14 @@ function redirect(string $path): void
     exit;
 }
 
+function require_post_request(string $redirectPath): void
+{
+    if (($_SERVER['REQUEST_METHOD'] ?? 'GET') !== 'POST') {
+        set_flash('error', 'Invalid request method.');
+        redirect($redirectPath);
+    }
+}
+
 function set_flash(string $type, string $message): void
 {
     $_SESSION['flash'] = ['type' => $type, 'message' => $message];
@@ -33,6 +41,31 @@ function get_flash(): ?array
 function old(string $key, string $default = ''): string
 {
     return e($_POST[$key] ?? $default);
+}
+
+function csrf_token(): string
+{
+    if (empty($_SESSION['_csrf'])) {
+        $_SESSION['_csrf'] = bin2hex(random_bytes(32));
+    }
+
+    return (string) $_SESSION['_csrf'];
+}
+
+function csrf_input(): string
+{
+    return '<input type="hidden" name="_csrf" value="' . e(csrf_token()) . '">';
+}
+
+function require_csrf(string $redirectPath): void
+{
+    $token = (string) ($_POST['_csrf'] ?? '');
+    $sessionToken = (string) ($_SESSION['_csrf'] ?? '');
+
+    if ($token === '' || $sessionToken === '' || !hash_equals($sessionToken, $token)) {
+        set_flash('error', 'Your session expired. Please try again.');
+        redirect($redirectPath);
+    }
 }
 
 function sanitize_text(?string $value): string
@@ -112,17 +145,44 @@ function handle_upload(string $field, string $targetDir): ?string
         throw new RuntimeException('Image upload failed.');
     }
 
+    if (!is_uploaded_file($file['tmp_name'])) {
+        throw new RuntimeException('Invalid upload source.');
+    }
+
+    $maxFileSize = 5 * 1024 * 1024;
+    if ((int) $file['size'] <= 0 || (int) $file['size'] > $maxFileSize) {
+        throw new RuntimeException('Image must be smaller than 5 MB.');
+    }
+
     $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
     $allowed = ['jpg', 'jpeg', 'png', 'webp'];
     if (!in_array($ext, $allowed, true)) {
         throw new RuntimeException('Only jpg, jpeg, png, and webp images are allowed.');
     }
 
-    if (!is_dir($targetDir)) {
-        mkdir($targetDir, 0777, true);
+    $imageInfo = @getimagesize($file['tmp_name']);
+    if ($imageInfo === false) {
+        throw new RuntimeException('Uploaded file is not a valid image.');
     }
 
-    $filename = uniqid('food_', true) . '.' . $ext;
+    $finfo = new finfo(FILEINFO_MIME_TYPE);
+    $mimeType = $finfo->file($file['tmp_name']) ?: '';
+    $allowedMimeTypes = [
+        'jpg' => 'image/jpeg',
+        'jpeg' => 'image/jpeg',
+        'png' => 'image/png',
+        'webp' => 'image/webp',
+    ];
+
+    if (($allowedMimeTypes[$ext] ?? null) !== $mimeType) {
+        throw new RuntimeException('Image format does not match the uploaded file.');
+    }
+
+    if (!is_dir($targetDir)) {
+        mkdir($targetDir, 0755, true);
+    }
+
+    $filename = bin2hex(random_bytes(16)) . '.' . $ext;
     $destination = rtrim($targetDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $filename;
 
     if (!move_uploaded_file($file['tmp_name'], $destination)) {
@@ -189,4 +249,42 @@ function food_image(?string $image): string
     }
 
     return asset_path($image);
+}
+
+function local_upload_path(string $relativePath): ?string
+{
+    $relativePath = trim($relativePath);
+    if ($relativePath === '' || preg_match('/^https?:\/\//i', $relativePath) === 1) {
+        return null;
+    }
+
+    $normalized = str_replace(['/', '\\'], DIRECTORY_SEPARATOR, ltrim($relativePath, '/\\'));
+    $uploadsRoot = realpath(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'uploads');
+    if ($uploadsRoot === false) {
+        return null;
+    }
+
+    $fullPath = dirname(__DIR__) . DIRECTORY_SEPARATOR . $normalized;
+    $directory = realpath(dirname($fullPath));
+    if ($directory === false) {
+        return null;
+    }
+
+    $uploadsRoot = rtrim($uploadsRoot, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+    $directory = rtrim($directory, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+    if (strpos($directory, $uploadsRoot) !== 0) {
+        return null;
+    }
+
+    return $fullPath;
+}
+
+function delete_local_upload(?string $relativePath): void
+{
+    $fullPath = $relativePath ? local_upload_path($relativePath) : null;
+    if ($fullPath === null || !is_file($fullPath)) {
+        return;
+    }
+
+    @unlink($fullPath);
 }

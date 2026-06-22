@@ -16,6 +16,7 @@ require __DIR__ . '/includes/header.php';
         </div>
     </div>
     <form action="actions/login_action.php" method="post" data-loading-form>
+        <?= csrf_input() ?>
         <div class="form-grid">
             <div class="full">
                 <label>Email</label>
@@ -30,7 +31,5 @@ require __DIR__ . '/includes/header.php';
             </div>
         </div>
     </form>
-    <p class="meta-copy">Demo admin: <strong>admin@foodapp.test</strong> / <strong>admin123</strong></p>
-    <p class="meta-copy">Demo customer: <strong>customer@foodapp.test</strong> / <strong>user12345</strong></p>
 </section>
 <?php require __DIR__ . '/includes/footer.php'; ?>

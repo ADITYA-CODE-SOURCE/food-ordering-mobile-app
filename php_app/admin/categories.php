@@ -3,6 +3,8 @@ require_once dirname(__DIR__) . '/includes/bootstrap.php';
 require_admin();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    require_csrf('categories.php');
+
     $name = sanitize_text($_POST['name'] ?? '');
     $icon = sanitize_text($_POST['icon'] ?? 'fa-utensils');
     $description = sanitize_text($_POST['description'] ?? '');
@@ -23,6 +25,7 @@ require dirname(__DIR__) . '/includes/header.php';
         <div class="panel">
             <h1 class="section-title" style="font-size:34px;">Category CRUD</h1>
             <form method="post" data-loading-form>
+                <?= csrf_input() ?>
                 <div class="form-grid">
                     <div><label>Name</label><input type="text" name="name" required></div>
                     <div><label>Icon class</label><input type="text" name="icon" placeholder="fa-pizza-slice"></div>

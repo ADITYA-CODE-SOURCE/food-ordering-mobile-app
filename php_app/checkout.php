@@ -22,10 +22,11 @@ require __DIR__ . '/includes/header.php';
         <div class="section-head" style="margin-top:0;">
             <div>
                 <h1 class="section-title" style="font-size:34px;">Checkout</h1>
-                <p class="section-subtitle" style="color:var(--muted);">Interview-ready order form with contact details, address, payment method, and coupon support.</p>
+                <p class="section-subtitle" style="color:var(--muted);">Complete your order with contact details, delivery address, payment method, and coupon support.</p>
             </div>
         </div>
         <form action="actions/place_order_action.php" method="post" data-loading-form>
+            <?= csrf_input() ?>
             <div class="form-grid">
                 <div>
                     <label>Name</label>

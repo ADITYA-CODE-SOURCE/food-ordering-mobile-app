@@ -47,12 +47,14 @@ require __DIR__ . '/includes/header.php';
                             <?php endif; ?>
                             <div class="card-actions">
                                 <form action="actions/cart_action.php" method="post" style="display:flex;gap:10px;align-items:center;">
+                                    <?= csrf_input() ?>
                                     <input type="hidden" name="cart_id" value="<?= (int) $item['id'] ?>">
                                     <input type="hidden" name="action" value="update">
                                     <input type="number" name="quantity" min="1" max="10" value="<?= (int) $item['quantity'] ?>" style="width:90px;">
                                     <button type="submit">Update</button>
                                 </form>
                                 <form action="actions/cart_action.php" method="post">
+                                    <?= csrf_input() ?>
                                     <input type="hidden" name="cart_id" value="<?= (int) $item['id'] ?>">
                                     <input type="hidden" name="action" value="remove">
                                     <button class="button ghost" type="submit">Remove</button>

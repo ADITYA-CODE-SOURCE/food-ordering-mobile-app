@@ -18,9 +18,8 @@ cd "C:\Users\1111a\d\food-ordering-mobile-app\php_app"
 ## 3. Open the customer application
 
 - Visit `http://127.0.0.1:9000/menu.php`
-- Login with:
-  - admin: `admin@foodapp.test` / `admin123`
-  - customer: `customer@foodapp.test` / `user12345`
+- Create an admin account directly in MySQL before testing admin flows.
+- Register a fresh customer account from `register.php` before testing customer flows.
 
 ## 4. Demo flow for interview
 

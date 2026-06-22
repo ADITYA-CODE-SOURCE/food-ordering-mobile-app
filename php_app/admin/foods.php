@@ -24,7 +24,14 @@ require dirname(__DIR__) . '/includes/header.php';
                             <td><?= format_currency((float) ($food['discount_price'] ?: $food['base_price'])) ?></td>
                             <td><?= e((string) $food['rating']) ?></td>
                             <td><span class="<?= $food['availability_status'] === 'available' ? 'badge success' : 'badge warning' ?>"><?= e($food['availability_status']) ?></span></td>
-                            <td class="card-actions"><a class="button secondary" href="food_form.php?id=<?= (int) $food['id'] ?>">Edit</a><a class="button ghost" href="food_delete.php?id=<?= (int) $food['id'] ?>" onclick="return confirm('Delete this food item?')">Delete</a></td>
+                            <td class="card-actions">
+                                <a class="button secondary" href="food_form.php?id=<?= (int) $food['id'] ?>">Edit</a>
+                                <form action="food_delete.php" method="post" style="display:inline;" onsubmit="return confirm('Delete this food item?');">
+                                    <?= csrf_input() ?>
+                                    <input type="hidden" name="id" value="<?= (int) $food['id'] ?>">
+                                    <button class="button ghost" type="submit">Delete</button>
+                                </form>
+                            </td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>

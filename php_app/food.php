@@ -66,6 +66,7 @@ require __DIR__ . '/includes/header.php';
         <h2 style="margin-top:0;">Customize order</h2>
         <?php if (is_logged_in()): ?>
             <form action="actions/cart_action.php" method="post" data-loading-form>
+                <?= csrf_input() ?>
                 <input type="hidden" name="food_id" value="<?= (int) $food['id'] ?>">
                 <label>Variant</label>
                 <select name="variant_id">
@@ -90,10 +91,12 @@ require __DIR__ . '/includes/header.php';
                 <button type="submit" style="margin-top:18px;width:100%;">Add to cart</button>
             </form>
             <form action="actions/favorite_action.php" method="post" style="margin-top:14px;">
+                <?= csrf_input() ?>
                 <input type="hidden" name="food_id" value="<?= (int) $food['id'] ?>">
                 <button class="button ghost" type="submit" style="width:100%;">Save to wishlist</button>
             </form>
             <form action="actions/review_action.php" method="post" data-loading-form style="margin-top:22px;">
+                <?= csrf_input() ?>
                 <input type="hidden" name="food_id" value="<?= (int) $food['id'] ?>">
                 <label>Rate this food</label>
                 <select name="rating" required>

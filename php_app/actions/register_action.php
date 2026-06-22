@@ -1,6 +1,9 @@
 <?php
 require_once dirname(__DIR__) . '/includes/bootstrap.php';
 
+require_post_request('../register.php');
+require_csrf('../register.php');
+
 $name = sanitize_text($_POST['name'] ?? '');
 $phone = sanitize_text($_POST['phone'] ?? '');
 $email = filter_var($_POST['email'] ?? '', FILTER_VALIDATE_EMAIL);

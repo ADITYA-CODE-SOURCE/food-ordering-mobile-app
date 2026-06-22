@@ -2,6 +2,9 @@
 require_once dirname(__DIR__) . '/includes/bootstrap.php';
 require_admin();
 
+require_post_request('foods.php');
+require_csrf('foods.php');
+
 $id = (int) ($_POST['id'] ?? 0);
 $name = sanitize_text($_POST['name'] ?? '');
 $categoryId = (int) ($_POST['category_id'] ?? 0);
@@ -42,6 +45,9 @@ if ($id > 0) {
     $image = $imagePath ?: ($existing['image'] ?? null);
     $stmt = $pdo->prepare('UPDATE foods SET category_id = ?, name = ?, slug = ?, short_description = ?, description = ?, ingredients = ?, nutrition_info = ?, preparation_time = ?, image = ?, base_price = ?, discount_price = ?, rating = ?, availability_status = ?, spice_level = ?, is_featured = ?, is_recommended = ?, is_popular = ?, is_trending = ?, is_new_arrival = ? WHERE id = ?');
     $stmt->execute([$categoryId, $name, slugify($name), $shortDescription, $description, $ingredients, $nutrition, $prepTime, $image, $basePrice, $discountPrice, $rating, $availability, $spiceLevel, ...$flags, $id]);
+    if ($imagePath !== null && !empty($existing['image']) && $existing['image'] !== $imagePath) {
+        delete_local_upload($existing['image']);
+    }
     set_flash('success', 'Food updated successfully.');
 } else {
     if ($imagePath === null) {

@@ -1,5 +1,4 @@
-CREATE DATABASE IF NOT EXISTS food_ordering_app;
-USE food_ordering_app;
+USE foodapp_db;
 
 DROP TABLE IF EXISTS order_items;
 DROP TABLE IF EXISTS orders;

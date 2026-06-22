@@ -2,6 +2,9 @@
 require_once dirname(__DIR__) . '/includes/bootstrap.php';
 require_login();
 
+require_post_request('../checkout.php');
+require_csrf('../checkout.php');
+
 $user = current_user();
 $customerName = sanitize_text($_POST['customer_name'] ?? '');
 $customerPhone = sanitize_text($_POST['customer_phone'] ?? '');
@@ -38,6 +41,7 @@ if (!$cartItems) {
 $subtotal = array_reduce($cartItems, fn ($sum, $item) => $sum + ((float) $item['unit_price'] * (int) $item['quantity']), 0.0);
 $deliveryFee = $subtotal >= 499 ? 0.0 : 40.0;
 $discountAmount = 0.0;
+$couponId = null;
 
 if ($couponCode !== '') {
     $coupon = fetch_one($pdo, 'SELECT * FROM coupons WHERE code = ? AND is_active = 1 AND (expires_at IS NULL OR expires_at > NOW()) AND (usage_limit IS NULL OR used_count < usage_limit)', [$couponCode]);
@@ -48,7 +52,7 @@ if ($couponCode !== '') {
         if (!empty($coupon['max_discount'])) {
             $discountAmount = min($discountAmount, (float) $coupon['max_discount']);
         }
-        $pdo->prepare('UPDATE coupons SET used_count = used_count + 1 WHERE id = ?')->execute([$coupon['id']]);
+        $couponId = (int) $coupon['id'];
     }
 }
 
@@ -57,6 +61,10 @@ $totalAmount = max(0, $subtotal - $discountAmount + $deliveryFee);
 $pdo->beginTransaction();
 
 try {
+    if ($couponId !== null) {
+        $pdo->prepare('UPDATE coupons SET used_count = used_count + 1 WHERE id = ?')->execute([$couponId]);
+    }
+
     $orderNumber = build_order_number();
     $orderStmt = $pdo->prepare('INSERT INTO orders (order_number, user_id, address_id, customer_name, customer_phone, delivery_address, payment_method, payment_status, order_status, subtotal, discount_amount, delivery_fee, total_amount, coupon_code, notes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
     $orderStmt->execute([
